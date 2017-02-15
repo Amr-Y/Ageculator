@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:id="@+id/activity_splash"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.transcendedapps.ageculator.SplashActivity">
+
+    <ImageView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:srcCompat="@drawable/splash"
+        android:id="@+id/imageView"
+        android:scaleType="centerInside"
+        android:background="@android:color/background_light"
+        android:contentDescription="Logo" />
+</LinearLayout>

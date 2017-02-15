@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "87373299254",
+    "firebase_url": "https://ageculator-c3e99.firebaseio.com",
+    "project_id": "ageculator-c3e99",
+    "storage_bucket": "ageculator-c3e99.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87373299254:android:d8dd2dc5e72bdb27",
+        "android_client_info": {
+          "package_name": "com.transcendedapps.ageculator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87373299254-hnlagrqndlrvbqipeklduvgccugqn0hg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.transcendedapps.ageculator",
+            "certificate_hash": "3BBE4EC9699989D540D7B5922CCAF7A723741F1C"
+          }
+        },
+        {
+          "client_id": "87373299254-6hg3i2ap4h8pvcqa7erhudihluv8lm97.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMo-O2mvc0SZnEeEkii1raYkYfw35LiCg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87373299254-6hg3i2ap4h8pvcqa7erhudihluv8lm97.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
