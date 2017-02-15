@@ -103,6 +103,7 @@
 
         <Button
             android:text="Pick date"
+            android:onClick="datePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btPick"

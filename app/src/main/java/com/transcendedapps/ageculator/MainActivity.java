@@ -1,8 +1,12 @@
 package com.transcendedapps.ageculator;
 
+import android.app.DatePickerDialog;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -158,4 +162,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //@RequiresApi(api = Build.VERSION_CODES.N)
+    public void datePicker(View view) {
+        DatePickerDialog picker = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                etDay.setText(dayOfMonth+"");
+                etMonth.setText(month+"");
+                etYear.setText(year+"");
+            }
+        },now.get(Calendar.DAY_OF_MONTH),now.get(Calendar.MONTH)+1,now.get(Calendar.YEAR));
+        picker.show();
+
+    }
 }
