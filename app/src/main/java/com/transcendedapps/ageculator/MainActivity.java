@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
+            Toast.makeText(this, "Calculated", Toast.LENGTH_SHORT).show();
             return (years + " years" + ", " + months + " months" + ", " + days + " days");
 
         } catch (Exception e) {
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         if (remDaysToBD < 0) {
             remDaysToBD += now.getActualMaximum(Calendar.DAY_OF_YEAR);
         } else if (remDaysToBD == 0) {
-            return "Today, Happy birthday";
+            return "Happy birthday";
         }
         return (remDaysToBD+"");
     }
