@@ -1,14 +1,12 @@
 package com.transcendedapps.ageculator;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,13 +14,10 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
-import android.widget.NumberPicker;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,18 +31,20 @@ import java.util.GregorianCalendar;
 public class MainActivity extends AppCompatActivity {
 
     private AdView mAdView;
+    private LinearLayout resultContainer;
     private TextView tvDay;
     private TextView tvMonth;
     private TextView tvYear;
-    private TextView tvAge;
-    private TextView tvNextBD;
+    private TextView tvAgeYearOut;
+    private TextView tvAgeMonthOut;
+    private TextView tvAgeDayOut;
+    private TextView tvErrorOut;
+    private TextView tvNextMonths;
+    private TextView tvNextDays;
     private TextView tvHoro;
-    private EditText etDay;
-    private EditText etMonth;
-    private EditText etYear;
-    private TextView tvAgeDisplay;
-    private TextView tvnextBDDisplay;
-    private TextView tvHoroDsplay;
+    private EditText etDayIn;
+    private EditText etMonthIn;
+    private EditText etYearIn;
     private GregorianCalendar now = new GregorianCalendar();
     private GregorianCalendar bDay = new GregorianCalendar();
 
@@ -68,15 +65,18 @@ public class MainActivity extends AppCompatActivity {
         tvDay       = (TextView) findViewById(R.id.tvDay);
         tvMonth     = (TextView) findViewById(R.id.tvMonth);
         tvYear      = (TextView) findViewById(R.id.tvYear);
-        tvAge       = (TextView) findViewById(R.id.tvAge);
-        tvNextBD    = (TextView) findViewById(R.id.tvNextBD);
+        tvAgeYearOut = (TextView) findViewById(R.id.tvAgeYear);
+        tvAgeMonthOut = (TextView) findViewById(R.id.tvAgeMonth);
+        tvAgeDayOut = (TextView) findViewById(R.id.tvAgeDay);
+        tvErrorOut = (TextView) findViewById(R.id.tvErrorMSG);
+        tvNextMonths = (TextView) findViewById(R.id.tvNextMonths);
+        tvNextDays = (TextView) findViewById(R.id.tvNextDays);
         tvHoro      = (TextView) findViewById(R.id.tvHoro);
-        etDay       = (EditText) findViewById(R.id.etDay);
-        etMonth     = (EditText) findViewById(R.id.etMonth);
-        etYear      = (EditText) findViewById(R.id.etYear);
-        tvAgeDisplay = (TextView) findViewById(R.id.tvAgeDisplay);
-        tvnextBDDisplay = (TextView) findViewById(R.id.tvnextBDDisplay);
-        tvHoroDsplay = (TextView) findViewById(R.id.tvHoroDsplay);
+        etDayIn = (EditText) findViewById(R.id.etDay);
+        etMonthIn = (EditText) findViewById(R.id.etMonth);
+        etYearIn = (EditText) findViewById(R.id.etYear);
+        resultContainer = (LinearLayout) findViewById(R.id.resultContainer);
+        resultContainer.setVisibility(View.INVISIBLE);
 
         //setPopUps();
 
@@ -87,17 +87,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void btCalculate(View view) {
-        Toast.makeText(this, "Calculation finished", Toast.LENGTH_SHORT).show();
+        tvErrorOut.setTextColor(Color.RED);
+        resultContainer.setVisibility(View.INVISIBLE);
         if (calculateAgeCheck()) {
-            tvAgeDisplay.setVisibility(View.VISIBLE);
-            tvnextBDDisplay.setVisibility(View.VISIBLE);
-            tvHoroDsplay.setVisibility(View.VISIBLE);
-            tvNextBD.setVisibility(View.VISIBLE);
-            tvHoro.setVisibility(View.VISIBLE);
+            Toast.makeText(this, "Calculation finished", Toast.LENGTH_SHORT).show();
+
+            calculateRemain();
+            tvHoro.setText(horoscopeSelect());
+            resultContainer.setVisibility(View.VISIBLE);
         }
-        //tvAge.setText(calculateAge());
-        tvNextBD.setText(calculateRemain());
-        tvHoro.setText(horoscopeSelect());
+
+
+
 
     }
 
@@ -124,9 +125,9 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean calculateAgeCheck() {
         try {
-            bDay.set(Integer.parseInt(etYear.getText().toString()),
-                    Integer.parseInt(etMonth.getText().toString()) - 1,
-                    Integer.parseInt(etDay.getText().toString()));
+            bDay.set(Integer.parseInt(etYearIn.getText().toString()),
+                    Integer.parseInt(etMonthIn.getText().toString()) - 1,
+                    Integer.parseInt(etDayIn.getText().toString()));
 
 
             int years = now.get(Calendar.YEAR) - bDay.get(Calendar.YEAR);
@@ -134,15 +135,15 @@ public class MainActivity extends AppCompatActivity {
             int days = now.get(Calendar.DAY_OF_MONTH) - bDay.get(Calendar.DAY_OF_MONTH);
 
 
-            if (Integer.parseInt(etYear.getText().toString()) > now.get(Calendar.YEAR)) {
-                tvAge.setText("Invalid Year");
+            if (Integer.parseInt(etYearIn.getText().toString()) > now.get(Calendar.YEAR)) {
+                tvErrorOut.setText("Invalid Year");
                 return (false);
-            } else if (Integer.parseInt(etMonth.getText().toString()) - 1 < 0 || Integer.parseInt(etMonth.getText().toString()) - 1 > 11) {
-                tvAge.setText("Invalid Month");
+            } else if ((Integer.parseInt(etMonthIn.getText().toString()) - 1 < 0 || Integer.parseInt(etMonthIn.getText().toString()) - 1 > 11)|| (bDay.getTimeInMillis()>now.getTimeInMillis() && Integer.parseInt(etMonthIn.getText().toString())-1> now.get(Calendar.MONTH))) {
+                tvErrorOut.setText("Invalid Month");
                 return (false);
                 //If month entered doesn't equal month set on calender then the days entered were > max days @ this month
-            } else if (Integer.parseInt(etDay.getText().toString()) < 1 || Integer.parseInt(etMonth.getText().toString()) != bDay.get(Calendar.MONTH) + 1) {
-                tvAge.setText("Invalid Day");
+            } else if ((Integer.parseInt(etDayIn.getText().toString()) < 1) || (Integer.parseInt(etMonthIn.getText().toString()) != bDay.get(Calendar.MONTH) + 1) || ((bDay.getTimeInMillis())>now.getTimeInMillis() && Integer.parseInt(etDayIn.getText().toString())> now.get(Calendar.DAY_OF_MONTH))) {
+                tvErrorOut.setText("Invalid Day");
                 return (false);
             }
 
@@ -156,29 +157,41 @@ public class MainActivity extends AppCompatActivity {
                 months = 12 + months;
             }
 
-            tvAge.setText(years + " years" + ", " + months + " months" + ", " + days + " days");
+            tvAgeYearOut.setText(String.valueOf(years));
+            tvAgeMonthOut.setText(String.valueOf(months));
+            tvAgeDayOut.setText(String.valueOf(days));
+            tvErrorOut.setText("");
             return (true);
 
         } catch (Exception e) {
 
-            tvAge.setText("Error");
+            tvErrorOut.setText("Error");
+            Log.d("try",e.toString());
             return false;
         }
 
     }
 
-    public String calculateRemain (){
+    public void calculateRemain (){
         int remMonthToBd = bDay.get(Calendar.MONTH) - now.get(Calendar.MONTH);
-        if (remMonthToBd<0) {remMonthToBd+=12;}
+
 
         int remDaysToBD = (bDay.get(Calendar.DAY_OF_MONTH) - now.get(Calendar.DAY_OF_MONTH));
         if (remDaysToBD < 0) {
             remDaysToBD += now.getActualMaximum(Calendar.DAY_OF_MONTH);
             remMonthToBd--;
-        } else if (remDaysToBD == 0 && remMonthToBd == 0) {
-            return "Happy birthday";
         }
-        return (remMonthToBd+" Months, "+remDaysToBD+" days");
+        if (remMonthToBd<0) {remMonthToBd+=12;}
+
+        if (remDaysToBD == 0 && remMonthToBd == 0) {
+            tvErrorOut.setText("Happy Birthday");
+            tvErrorOut.setTextColor(Color.MAGENTA);
+            tvNextMonths.setText(String.valueOf(12));
+            tvNextDays.setText(String.valueOf(0));
+        } else {
+            tvNextMonths.setText(String.valueOf(remMonthToBd));
+            tvNextDays.setText(String.valueOf(remDaysToBD));
+        }
     }
 
     public String horoscopeSelect() {
@@ -228,14 +241,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void datePicker(View view) {
+        int day = now.get(Calendar.DAY_OF_MONTH);
+        if (!etDayIn.getText().toString().isEmpty()){
+            day = Integer.parseInt(etDayIn.getText().toString());
+        }
+
+        int month = now.get(Calendar.MONTH);
+        if (!etMonthIn.getText().toString().isEmpty()){
+            month = Integer.parseInt(etMonthIn.getText().toString())-1;
+        }
+
+        int year = now.get(Calendar.YEAR);
+        if (!etYearIn.getText().toString().isEmpty()){
+            year = Integer.parseInt(etYearIn.getText().toString());
+        }
+
         DatePickerDialog picker = new DatePickerDialog(MainActivity.this, android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                etDay.setText(dayOfMonth+"");
-                etMonth.setText((month+1)+"");
-                etYear.setText(year+"");
+                etDayIn.setText(dayOfMonth+"");
+                etMonthIn.setText((month+1)+"");
+                etYearIn.setText(year+"");
             }
-        },now.get(Calendar.YEAR),now.get(Calendar.MONTH)+1,now.get(Calendar.DAY_OF_MONTH));
+        },year,month,day);
 
         picker.show();
 
@@ -263,42 +291,42 @@ public class MainActivity extends AppCompatActivity {
         }
         final ArrayAdapter<String> adapterYears = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,YEARS);
 
-        etDay.setOnClickListener(new View.OnClickListener() {
+        etDayIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
                 final ListPopupWindow lpw = new ListPopupWindow(MainActivity.this);
                 lpw.setAdapter(adapterDays);
-                lpw.setAnchorView(etDay);
+                lpw.setAnchorView(etDayIn);
                 lpw.setHeight(700);
 
                 lpw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        etDay.setText(String.valueOf(DAYS[position]));
+                        etDayIn.setText(String.valueOf(DAYS[position]));
                         lpw.dismiss();
                     }
                 });
                 lpw.show();
             }
         });
-        etDay.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        etDayIn.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
 
 
-        etMonth.setOnClickListener(new View.OnClickListener() {
+        etMonthIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final ListPopupWindow lpw = new ListPopupWindow(MainActivity.this);
                 lpw.setAdapter(adapterMonths);
-                lpw.setAnchorView(etMonth);
+                lpw.setAnchorView(etMonthIn);
                 lpw.setHeight(700);
 
                 lpw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        etMonth.setText(String.valueOf(MONTHS[position]));
+                        etMonthIn.setText(String.valueOf(MONTHS[position]));
                         lpw.dismiss();
                     }
                 });
@@ -306,18 +334,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        etYear.setOnClickListener(new View.OnClickListener() {
+        etYearIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final ListPopupWindow lpw = new ListPopupWindow(MainActivity.this);
                 lpw.setAdapter(adapterYears);
-                lpw.setAnchorView(etYear);
+                lpw.setAnchorView(etYearIn);
                 lpw.setHeight(700);
 
                 lpw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        etYear.setText(String.valueOf(YEARS[position]));
+                        etYearIn.setText(String.valueOf(YEARS[position]));
                         lpw.dismiss();
                     }
                 });

@@ -6,26 +6,67 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.transcendedapps.ageculator.MainActivity">
 
-    <RelativeLayout
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/RLtop">
+        android:paddingBottom="42dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="42dp"
+        android:id="@+id/RLtop"
+        android:background="@android:color/transparent"
+        android:elevation="1dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/todayHeader">
+
+            <Space
+                android:layout_height="wrap_content"
+                android:layout_width="90dp" />
+
+            <TextView
+                android:text="Day"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewD"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:text="Month"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewM"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:text="Year"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewY"
+                android:layout_weight="2"
+                android:gravity="center_horizontal" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:orientation="horizontal"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
             android:id="@+id/LLToday">
 
             <TextView
@@ -74,11 +115,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@id/LLToday"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
             android:id="@+id/LLBirthDate">
 
             <TextView
@@ -126,15 +162,226 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:onClick="datePicker"
-                ads:srcCompat="@drawable/cicon"
+                ads:srcCompat="@drawable/calen"
                 android:id="@+id/imageButton"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:background="@android:color/transparent"
-                android:padding="6dp" />
+                android:padding="8dp"
+                android:background="@android:color/transparent" />
 
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/LlButtonCalculate"
+        android:orientation="horizontal"
+        android:layout_below="@+id/RLtop"
+        android:layout_alignParentStart="false"
+        android:elevation="3dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:text="calculate"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:onClick="btCalculate"
+            android:background="@android:color/black"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:id="@+id/buttonCalulate"
+            android:textColor="@android:color/white" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:text="Enter birth details then press calculate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvErrorMSG"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/LlButtonCalculate"
+        android:paddingTop="24dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="100dp"
+        android:layout_below="@+id/RLtop"
+        android:background="@android:color/transparent"
+        android:elevation="1dp"
+        android:id="@+id/resultContainer">
+
+        <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/resultHeader">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="Years"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:layout_weight="1"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:text="Months"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"/>
+
+        <TextView
+            android:text="Days"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"/>
+    </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ageResult"
+            android:paddingTop="12dp">
+
+            <TextView
+                android:text="Age: "
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvAgeDisplay"
+                android:textSize="18sp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:textColor="@android:color/background_dark"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvAgeYear"
+                android:textSize="18sp"
+                android:textColor="@android:color/background_dark"
+                android:layout_weight="1"
+                android:text="YY"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvAgeMonth"
+                android:textSize="18sp"
+                android:textColor="@android:color/background_dark"
+                android:layout_weight="1"
+                android:text="MM"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvAgeDay"
+                android:textSize="18sp"
+                android:textColor="@android:color/background_dark"
+                android:layout_weight="1"
+                android:text="DD"
+                android:gravity="center_horizontal"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nextResult"
+            android:paddingTop="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvnextBDDisplay"
+                android:textSize="18sp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:textColor="@android:color/background_dark"
+                android:text="Next birthday in:"
+                android:layout_weight="2" />
+
+            <TextView
+                android:text="MM"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvNextMonths"
+                android:textSize="18sp"
+                android:textColor="@android:color/background_dark"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:text="DD"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@android:color/background_dark"
+                android:id="@+id/tvNextDays"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/horoResult"
+            android:paddingTop="36dp">
+
+            <TextView
+                android:text="Your Horoscope is: "
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvHoroDsplay"
+                android:textSize="18sp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:textColor="@android:color/background_dark" />
+
+            <TextView
+                android:text="DOG"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvHoro"
+                android:textSize="18sp"
+                android:textColor="@android:color/background_dark"
+                android:gravity="center_horizontal"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -145,96 +392,5 @@
         ads:adSize="BANNER"
         ads:adUnitId="@string/banner_ad_unit_id">
     </com.google.android.gms.ads.AdView>
-
-
-    <TextView
-        android:text="Age: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btCalculate"
-        android:layout_alignParentStart="true"
-        android:id="@+id/tvAgeDisplay"
-        android:textSize="18sp"
-        android:paddingStart="8dp"
-        android:paddingTop="36dp"
-        android:textColor="@android:color/background_dark"
-        android:visibility="invisible" />
-
-    <TextView
-        android:text="Enter birth info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/tvAgeDisplay"
-        android:layout_toEndOf="@id/tvAgeDisplay"
-        android:id="@+id/tvAge"
-        android:textSize="18sp"
-        android:paddingStart="4dp"
-        android:textColor="@android:color/background_dark"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvAgeDisplay"
-        android:layout_alignParentStart="true"
-        android:id="@+id/tvnextBDDisplay"
-        android:textSize="18sp"
-        android:paddingStart="8dp"
-        android:paddingTop="24dp"
-        android:textColor="@android:color/background_dark"
-        android:text="Next birthday:"
-        android:visibility="invisible" />
-
-    <TextView
-        android:text="xx Days"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/tvnextBDDisplay"
-        android:layout_toEndOf="@id/tvnextBDDisplay"
-        android:id="@+id/tvNextBD"
-        android:textSize="18sp"
-        android:paddingStart="4dp"
-        android:textColor="@android:color/background_dark"
-        android:visibility="invisible" />
-
-    <TextView
-        android:text="Horoscope is: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvnextBDDisplay"
-        android:layout_alignParentStart="true"
-        android:id="@+id/tvHoroDsplay"
-        android:textSize="18sp"
-        android:paddingStart="8dp"
-        android:paddingTop="24dp"
-        android:textColor="@android:color/background_dark"
-        android:visibility="invisible" />
-
-    <TextView
-        android:text="who cares"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/tvHoroDsplay"
-        android:layout_toEndOf="@id/tvHoroDsplay"
-        android:id="@+id/tvHoro"
-        android:textSize="18sp"
-        android:paddingStart="4dp"
-        android:textColor="@android:color/background_dark"
-        android:visibility="invisible" />
-
-    <Button
-        android:text="calculate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btCalculate"
-        android:layout_marginTop="26dp"
-        android:padding="8dp"
-        android:onClick="btCalculate"
-        android:layout_below="@+id/RLtop"
-        android:layout_alignParentStart="true"
-        android:background="@android:color/black"
-        style="@android:style/Widget.Holo.Button"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.Button"
-        android:textStyle="normal|bold" />
-
 
 </RelativeLayout>
