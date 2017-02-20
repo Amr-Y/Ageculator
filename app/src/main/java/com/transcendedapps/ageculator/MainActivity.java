@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AdView mAdView;
     private LinearLayout resultContainer;
+    private LinearLayout horoContainer;
     private TextView tvDay;
     private TextView tvMonth;
     private TextView tvYear;
@@ -78,10 +79,13 @@ public class MainActivity extends AppCompatActivity {
         etMonthIn = (EditText) findViewById(R.id.etMonth);
         etYearIn = (EditText) findViewById(R.id.etYear);
         resultContainer = (LinearLayout) findViewById(R.id.resultContainer);
+        horoContainer = (LinearLayout) findViewById(R.id.horoResult);
         horoIcon = (ImageView) findViewById(R.id.horoIcon);
 
         //Setting visibility and text actions
         resultContainer.setVisibility(View.INVISIBLE);
+        horoContainer.setVisibility(View.INVISIBLE);
+        tvErrorOut.setTextSize(14);
         etDayIn.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         etMonthIn.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         etYearIn.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -96,12 +100,15 @@ public class MainActivity extends AppCompatActivity {
     public void btCalculate(View view) {
         tvErrorOut.setTextColor(Color.RED);
         resultContainer.setVisibility(View.INVISIBLE);
+        horoContainer.setVisibility(View.INVISIBLE);
+        tvErrorOut.setTextSize(14);
         if (calculateAgeCheck()) {
             Toast.makeText(this, "Calculation finished", Toast.LENGTH_SHORT).show();
 
             calculateRemain();
             horoscopeSelect();
             resultContainer.setVisibility(View.VISIBLE);
+            horoContainer.setVisibility(View.VISIBLE);
         }
 
 
@@ -192,7 +199,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (remDaysToBD == 0 && remMonthToBd == 0) {
             tvErrorOut.setText("Happy Birthday");
-            tvErrorOut.setTextColor(Color.MAGENTA);
+            tvErrorOut.setTextSize(18);
+            tvErrorOut.setTextColor(Color.argb(255,0,204,255));
             tvNextMonths.setText(String.valueOf(12));
             tvNextDays.setText(String.valueOf(0));
         } else {
