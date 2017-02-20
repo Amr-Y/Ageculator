@@ -6,7 +6,8 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.transcendedapps.ageculator.MainActivity">
+    tools:context="com.transcendedapps.ageculator.MainActivity"
+    android:background="@color/colorPrimaryDark">
 
 
     <LinearLayout
@@ -18,8 +19,8 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="42dp"
         android:id="@+id/RLtop"
-        android:background="@android:color/transparent"
-        android:elevation="1dp"
+        android:background="@android:color/background_light"
+        android:elevation="2dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
 
@@ -134,7 +135,9 @@
                 android:layout_weight="1"
                 android:inputType="number"
                 android:maxLength="2"
-                android:gravity="center_vertical|center_horizontal" />
+                android:gravity="center_vertical|center_horizontal"
+
+                />
 
             <EditText
                 android:layout_width="0dp"
@@ -179,9 +182,11 @@
         android:orientation="horizontal"
         android:layout_below="@+id/RLtop"
         android:layout_alignParentStart="false"
-        android:elevation="3dp"
+        android:elevation="4dp"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingEnd="16dp"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="-12dp">
 
         <Space
             android:layout_width="0dp"
@@ -198,7 +203,8 @@
             android:textAllCaps="true"
             android:textStyle="bold"
             android:id="@+id/buttonCalulate"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:elevation="0dp" />
 
         <Space
             android:layout_width="0dp"
@@ -207,13 +213,14 @@
     </LinearLayout>
 
     <TextView
-        android:text="Enter birth details then press calculate"
+        android:text="1. Enter birth details or\nchoose date from calender\n\n2. Press calculate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvErrorMSG"
         android:gravity="center_horizontal"
         android:layout_below="@id/LlButtonCalculate"
-        android:paddingTop="24dp" />
+        android:padding="24dp"
+        android:elevation="1dp" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -225,7 +232,7 @@
         android:paddingTop="100dp"
         android:layout_below="@+id/RLtop"
         android:background="@android:color/transparent"
-        android:elevation="1dp"
+        android:elevation="0dp"
         android:id="@+id/resultContainer">
 
         <LinearLayout
@@ -269,10 +276,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ageResult"
-            android:paddingTop="12dp">
+            android:paddingTop="8dp">
 
             <TextView
-                android:text="Age: "
+                android:text="Age"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvAgeDisplay"
@@ -318,7 +325,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/nextResult"
-            android:paddingTop="12dp">
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
 
             <TextView
                 android:layout_width="0dp"
@@ -328,7 +336,7 @@
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
                 android:textColor="@android:color/background_dark"
-                android:text="Next birthday in:"
+                android:text="Next birthday"
                 android:layout_weight="2" />
 
             <TextView
@@ -357,10 +365,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/horoResult"
-            android:paddingTop="36dp">
+            android:paddingTop="36dp"
+            android:foregroundGravity="center_horizontal|fill_horizontal"
+            android:elevation="0dp"
+            android:background="@color/colorPrimaryDark">
 
             <TextView
-                android:text="Your Horoscope is: "
+                android:text="Horoscope"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -369,6 +380,14 @@
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
                 android:textColor="@android:color/background_dark" />
+
+            <ImageView
+                android:layout_width="0dp"
+                ads:srcCompat="@drawable/h1"
+                android:id="@+id/horoIcon"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:layout_height="60dp" />
 
             <TextView
                 android:text="DOG"

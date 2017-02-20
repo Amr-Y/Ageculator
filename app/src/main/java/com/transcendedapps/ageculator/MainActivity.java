@@ -2,7 +2,6 @@ package com.transcendedapps.ageculator;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.TextView;
@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText etDayIn;
     private EditText etMonthIn;
     private EditText etYearIn;
+    private ImageView horoIcon;
+
     private GregorianCalendar now = new GregorianCalendar();
     private GregorianCalendar bDay = new GregorianCalendar();
 
@@ -76,10 +78,15 @@ public class MainActivity extends AppCompatActivity {
         etMonthIn = (EditText) findViewById(R.id.etMonth);
         etYearIn = (EditText) findViewById(R.id.etYear);
         resultContainer = (LinearLayout) findViewById(R.id.resultContainer);
+        horoIcon = (ImageView) findViewById(R.id.horoIcon);
+
+        //Setting visibility and text actions
         resultContainer.setVisibility(View.INVISIBLE);
+        etDayIn.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        etMonthIn.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        etYearIn.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         //setPopUps();
-
         setToday();
 
 
@@ -93,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Calculation finished", Toast.LENGTH_SHORT).show();
 
             calculateRemain();
-            tvHoro.setText(horoscopeSelect());
+            horoscopeSelect();
             resultContainer.setVisibility(View.VISIBLE);
         }
 
@@ -194,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public String horoscopeSelect() {
+    public void horoscopeSelect() {
 
         int bDayToInt = bDay.get(Calendar.DAY_OF_YEAR);
         String[] signs = {
@@ -227,16 +234,34 @@ public class MainActivity extends AppCompatActivity {
                 new GregorianCalendar(2000, 11, 22).get(Calendar.DAY_OF_YEAR),// Capricorn start date
         };
 
+        int[] horoSet = {
+                R.drawable.h1,
+                R.drawable.h2,
+                R.drawable.h3,
+                R.drawable.h4,
+                R.drawable.h5,
+                R.drawable.h6,
+                R.drawable.h7,
+                R.drawable.h8,
+                R.drawable.h9,
+                R.drawable.h10,
+                R.drawable.h11,
+                R.drawable.h12,
+        };
+
         if (bDayToInt < signStartDates[0] || bDayToInt >= signStartDates[11]) {
-            return signs[11];
+            horoIcon.setImageResource(horoSet[11]);
+            tvHoro.setText(signs[11]);
         } else {
 
             for (int i = 0; i < signStartDates.length; i++) {
                 if (bDayToInt >= signStartDates[i] && bDayToInt < signStartDates[i + 1]) {
-                    return signs[i];
+
+                    horoIcon.setImageResource(horoSet[i]);
+                    tvHoro.setText(signs[i]);
                 }
             }
-            return "not found";
+
         }
     }
 
@@ -291,28 +316,32 @@ public class MainActivity extends AppCompatActivity {
         }
         final ArrayAdapter<String> adapterYears = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,YEARS);
 
-        etDayIn.setOnClickListener(new View.OnClickListener() {
+
+
+        etDayIn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (etDayIn.hasFocus()) {
+                    final ListPopupWindow lpw = new ListPopupWindow(MainActivity.this);
 
-
-                final ListPopupWindow lpw = new ListPopupWindow(MainActivity.this);
-                lpw.setAdapter(adapterDays);
-                lpw.setAnchorView(etDayIn);
-                lpw.setHeight(700);
-
-                lpw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        etDayIn.setText(String.valueOf(DAYS[position]));
-                        lpw.dismiss();
+                    lpw.setAdapter(adapterDays);
+                    lpw.setAnchorView(etDayIn);
+                    lpw.setHeight(700);
+                    if (lpw.isShowing()){
+                        lpw.setSelection(Integer.parseInt(etDayIn.getText().toString()));
                     }
-                });
-                lpw.show();
+
+                    lpw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            etDayIn.setText(String.valueOf(DAYS[position]));
+                            lpw.dismiss();
+                        }
+                    });
+                    lpw.show();
+                }
             }
         });
-        etDayIn.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-
 
 
         etMonthIn.setOnClickListener(new View.OnClickListener() {
