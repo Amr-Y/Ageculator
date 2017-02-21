@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,11 +43,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvErrorOut;
     private TextView tvNextMonths;
     private TextView tvNextDays;
+    private TextView tvAgeHeader;
+    private TextView tvnextHeader;
     private TextView tvHoro;
     private EditText etDayIn;
     private EditText etMonthIn;
     private EditText etYearIn;
     private ImageView horoIcon;
+    private RadioGroup rdCheck;
 
     private GregorianCalendar now = new GregorianCalendar();
     private GregorianCalendar bDay = new GregorianCalendar();
@@ -68,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         tvDay       = (TextView) findViewById(R.id.tvDay);
         tvMonth     = (TextView) findViewById(R.id.tvMonth);
         tvYear      = (TextView) findViewById(R.id.tvYear);
+        tvAgeHeader = (TextView) findViewById(R.id.tvAgeDisplay);
+        tvnextHeader = (TextView) findViewById(R.id.tvnextBDDisplay);
         tvAgeYearOut = (TextView) findViewById(R.id.tvAgeYear);
         tvAgeMonthOut = (TextView) findViewById(R.id.tvAgeMonth);
         tvAgeDayOut = (TextView) findViewById(R.id.tvAgeDay);
@@ -81,10 +87,12 @@ public class MainActivity extends AppCompatActivity {
         resultContainer = (LinearLayout) findViewById(R.id.resultContainer);
         horoContainer = (LinearLayout) findViewById(R.id.horoResult);
         horoIcon = (ImageView) findViewById(R.id.horoIcon);
+        rdCheck = (RadioGroup) findViewById(R.id.rgCheck);
 
         //Setting visibility and text actions
         resultContainer.setVisibility(View.INVISIBLE);
         horoContainer.setVisibility(View.INVISIBLE);
+        rdCheck.setVisibility(View.VISIBLE);
         tvErrorOut.setTextSize(14);
         etDayIn.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         etMonthIn.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -101,15 +109,29 @@ public class MainActivity extends AppCompatActivity {
         tvErrorOut.setTextColor(Color.RED);
         resultContainer.setVisibility(View.INVISIBLE);
         horoContainer.setVisibility(View.INVISIBLE);
+        rdCheck.setVisibility(View.INVISIBLE);
+        int radioCheck = rdCheck.getCheckedRadioButtonId();
         tvErrorOut.setTextSize(14);
-        if (calculateAgeCheck()) {
-            Toast.makeText(this, "Calculation finished", Toast.LENGTH_SHORT).show();
+        if (radioCheck == R.id.rd1) {
+            if (calculateAgeCheck()) {
+                Toast.makeText(this, "Calculation finished", Toast.LENGTH_SHORT).show();
 
-            calculateRemain();
-            horoscopeSelect();
-            resultContainer.setVisibility(View.VISIBLE);
-            horoContainer.setVisibility(View.VISIBLE);
+                calculateRemain();
+                horoscopeSelect();
+                resultContainer.setVisibility(View.VISIBLE);
+                horoContainer.setVisibility(View.VISIBLE);
+            }
+        } else if (radioCheck == R.id.rd2) {
+            if (calculateAgeCheck()) {
+                tvAgeHeader.setText("Passed");
+                tvnextHeader.setText("Next event");
+                Toast.makeText(this, "Calculation finished", Toast.LENGTH_SHORT).show();
+
+                calculateRemain();
+                resultContainer.setVisibility(View.VISIBLE);
+            }
         }
+
 
 
 
@@ -197,16 +219,33 @@ public class MainActivity extends AppCompatActivity {
         }
         if (remMonthToBd<0) {remMonthToBd+=12;}
 
-        if (remDaysToBD == 0 && remMonthToBd == 0) {
-            tvErrorOut.setText("Happy Birthday");
-            tvErrorOut.setTextSize(18);
-            tvErrorOut.setTextColor(Color.argb(255,0,204,255));
-            tvNextMonths.setText(String.valueOf(12));
-            tvNextDays.setText(String.valueOf(0));
-        } else {
-            tvNextMonths.setText(String.valueOf(remMonthToBd));
-            tvNextDays.setText(String.valueOf(remDaysToBD));
-        }
+        if (rdCheck.getCheckedRadioButtonId() == R.id.rd1) {
+            if (calculateAgeCheck()) {
+                if (remDaysToBD == 0 && remMonthToBd == 0) {
+                    tvErrorOut.setText("Happy Birthday");
+                    tvErrorOut.setTextSize(18);
+                    tvErrorOut.setTextColor(Color.argb(255,0,204,255));
+                    tvNextMonths.setText(String.valueOf(12));
+                    tvNextDays.setText(String.valueOf(0));
+                } else {
+                    tvNextMonths.setText(String.valueOf(remMonthToBd));
+                    tvNextDays.setText(String.valueOf(remDaysToBD));
+                }
+            }
+        } else if (rdCheck.getCheckedRadioButtonId() == R.id.rd2) {
+            if (remDaysToBD == 0 && remMonthToBd == 0) {
+                tvErrorOut.setText("Happy Anniversary");
+                tvErrorOut.setTextSize(18);
+                tvErrorOut.setTextColor(Color.argb(255,0,204,255));
+                tvNextMonths.setText(String.valueOf(12));
+                tvNextDays.setText(String.valueOf(0));
+            } else {
+                tvNextMonths.setText(String.valueOf(remMonthToBd));
+                tvNextDays.setText(String.valueOf(remDaysToBD));
+            }
+            }
+
+
     }
 
     public void horoscopeSelect() {
