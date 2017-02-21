@@ -6,7 +6,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark">
+    android:background="#FFF1F1F1">
 
 
     <LinearLayout
@@ -19,7 +19,7 @@
         android:paddingTop="28dp"
         android:id="@+id/RLtop"
         android:background="@android:color/background_light"
-        android:elevation="4dp"
+        android:elevation="3dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="12dp">
@@ -182,7 +182,7 @@
         android:orientation="horizontal"
         android:layout_below="@+id/RLtop"
         android:layout_alignParentStart="false"
-        android:elevation="5dp"
+        android:elevation="4dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:background="@android:color/transparent"
@@ -199,12 +199,12 @@
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:onClick="btCalculate"
-            android:background="@android:color/holo_blue_dark"
             android:textAllCaps="true"
             android:textStyle="bold"
             android:id="@+id/buttonCalulate"
-            android:textColor="@android:color/background_light"
-            android:elevation="0dp" />
+            style="@android:style/Widget.Material.Button"
+            android:backgroundTint="?android:attr/colorAccent"
+            android:textColor="@color/common_google_signin_btn_text_dark_default" />
 
         <Space
             android:layout_width="0dp"
@@ -212,15 +212,44 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <TextView
-        android:text="1. Enter birth details or\nchoose date from calender\n\n2. Press calculate"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvErrorMSG"
-        android:gravity="center_horizontal"
-        android:layout_below="@id/LlButtonCalculate"
-        android:padding="12dp"
-        android:elevation="3dp" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/LlButtonCalculate"
+        android:elevation="3dp"
+        android:id="@+id/promptContainer">
+
+        <TextView
+            android:text="1. Enter birth details,\nor choose date from calender\n\n2. Choose calculate age or anniversary\n\n3. Press calculate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvErrorMSG"
+            android:gravity="center_horizontal"
+            android:padding="12dp" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvErrorMSG"
+            android:padding="30dp"
+            android:id="@+id/rgCheck">
+
+            <RadioButton
+                android:text="Calculate Age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rd1"
+                android:layout_weight="1"
+                android:checked="true" />
+
+            <RadioButton
+                android:text="Calculate Anniversary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rd2"
+                android:layout_weight="1" />
+        </RadioGroup>
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="vertical"
@@ -231,7 +260,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="80dp"
         android:layout_below="@+id/RLtop"
-        android:background="@color/colorPrimaryDark"
+        android:background="#eaeaea"
         android:elevation="2dp"
         android:id="@+id/resultContainer">
 
@@ -369,7 +398,7 @@
         android:id="@+id/horoResult"
         android:foregroundGravity="center_horizontal|fill_horizontal"
         android:elevation="1dp"
-        android:background="#e1e1e1"
+        android:background="#d7d7d7"
         android:layout_below="@+id/resultContainer"
         android:paddingTop="20dp"
         android:paddingEnd="30dp"
