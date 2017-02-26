@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
 
     android:id="@+id/activity_main"
@@ -202,9 +201,8 @@
             android:textAllCaps="true"
             android:textStyle="bold"
             android:id="@+id/buttonCalulate"
-            style="@android:style/Widget.Material.Button"
-            android:backgroundTint="?android:attr/colorAccent"
-            android:textColor="@color/common_google_signin_btn_text_dark_default" />
+            android:backgroundTint="@color/buttonColor"
+            android:textColor="@android:color/white" />
 
         <Space
             android:layout_width="0dp"
