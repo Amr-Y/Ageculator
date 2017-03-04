@@ -1,23 +1,27 @@
 package com.transcendedapps.ageculator;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListPopupWindow;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout resultContainer;
     private LinearLayout horoContainer;
     private TextView tvDay;
+    private TextView tvPrompt;
     private TextView tvMonth;
     private TextView tvYear;
     private TextView tvAgeYearOut;
@@ -50,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText etMonthIn;
     private EditText etYearIn;
     private ImageView horoIcon;
-    private RadioGroup rdCheck;
+    private RadioGroup rgCheck;
+    private int radioCheck;
 
     private GregorianCalendar now = new GregorianCalendar();
     private GregorianCalendar bDay = new GregorianCalendar();
@@ -81,24 +87,44 @@ public class MainActivity extends AppCompatActivity {
         tvNextMonths = (TextView) findViewById(R.id.tvNextMonths);
         tvNextDays = (TextView) findViewById(R.id.tvNextDays);
         tvHoro      = (TextView) findViewById(R.id.tvHoro);
+        tvPrompt      = (TextView) findViewById(R.id.tvPrompt);
         etDayIn = (EditText) findViewById(R.id.etDay);
         etMonthIn = (EditText) findViewById(R.id.etMonth);
         etYearIn = (EditText) findViewById(R.id.etYear);
         resultContainer = (LinearLayout) findViewById(R.id.resultContainer);
         horoContainer = (LinearLayout) findViewById(R.id.horoResult);
         horoIcon = (ImageView) findViewById(R.id.horoIcon);
-        rdCheck = (RadioGroup) findViewById(R.id.rgCheck);
+        rgCheck = (RadioGroup) findViewById(R.id.rgCheck);
 
         //Setting visibility and text actions
         resultContainer.setVisibility(View.INVISIBLE);
         horoContainer.setVisibility(View.INVISIBLE);
-        rdCheck.setVisibility(View.VISIBLE);
+        rgCheck.setVisibility(View.VISIBLE);
         tvErrorOut.setTextSize(14);
         etDayIn.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         etMonthIn.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         etYearIn.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
-        //setPopUps();
+        //what radio checked
+        radioCheck = 1;
+        rgCheck.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                radioCheck = checkedId;
+                if (radioCheck==R.id.rd1) {
+                    radioCheck = 1;
+                    tvPrompt.setText("Birth Date");
+                } else if (radioCheck ==R.id.rd2) {
+                    radioCheck = 2;
+                    tvPrompt.setText("Event Date");
+                }
+            }
+        });
+
+
+
+        //primary execution
+        textHandlers();
         setToday();
 
 
@@ -107,12 +133,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void btCalculate(View view) {
         tvErrorOut.setTextColor(Color.RED);
+        tvErrorOut.setTextSize(14);
+
+
         resultContainer.setVisibility(View.INVISIBLE);
         horoContainer.setVisibility(View.INVISIBLE);
-        rdCheck.setVisibility(View.INVISIBLE);
-        int radioCheck = rdCheck.getCheckedRadioButtonId();
-        tvErrorOut.setTextSize(14);
-        if (radioCheck == R.id.rd1) {
+        rgCheck.setVisibility(View.INVISIBLE);
+
+
+        if (radioCheck == 1) {
             if (calculateAgeCheck()) {
                 Toast.makeText(this, "Calculation finished", Toast.LENGTH_SHORT).show();
 
@@ -121,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 resultContainer.setVisibility(View.VISIBLE);
                 horoContainer.setVisibility(View.VISIBLE);
             }
-        } else if (radioCheck == R.id.rd2) {
+        } else if (radioCheck == 2) {
             if (calculateAgeCheck()) {
                 tvAgeHeader.setText("Passed");
                 tvnextHeader.setText("Next event");
@@ -132,8 +161,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        //clear focus and set the focus on a 0*0 view
+        (findViewById(R.id.dummy_id)).requestFocus();
 
 
+        //Hides keyboard if open
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
 
     }
@@ -171,13 +205,19 @@ public class MainActivity extends AppCompatActivity {
             int days = now.get(Calendar.DAY_OF_MONTH) - bDay.get(Calendar.DAY_OF_MONTH);
 
 
+            //If entered year > now.year
             if (Integer.parseInt(etYearIn.getText().toString()) > now.get(Calendar.YEAR)) {
                 tvErrorOut.setText("Invalid Year");
                 return (false);
+            //must be less than 150 year
+            } else if ((radioCheck==1 && years>150)) {
+                tvErrorOut.setText("Vampire detected");
+                return (false);
+            //if month entered < 0 (or) > 12 (or) bd time > now time and month > now.month
             } else if ((Integer.parseInt(etMonthIn.getText().toString()) - 1 < 0 || Integer.parseInt(etMonthIn.getText().toString()) - 1 > 11)|| (bDay.getTimeInMillis()>now.getTimeInMillis() && Integer.parseInt(etMonthIn.getText().toString())-1> now.get(Calendar.MONTH))) {
                 tvErrorOut.setText("Invalid Month");
                 return (false);
-                //If month entered doesn't equal month set on calender then the days entered were > max days @ this month
+                //If day < 1 (or) bd.month entered doesn't equal month set on bd.calender then the bd.days entered were > max days @ this month (or) bd time > now time and days > now.days
             } else if ((Integer.parseInt(etDayIn.getText().toString()) < 1) || (Integer.parseInt(etMonthIn.getText().toString()) != bDay.get(Calendar.MONTH) + 1) || ((bDay.getTimeInMillis())>now.getTimeInMillis() && Integer.parseInt(etDayIn.getText().toString())> now.get(Calendar.DAY_OF_MONTH))) {
                 tvErrorOut.setText("Invalid Day");
                 return (false);
@@ -193,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
                 months = 12 + months;
             }
 
+            //if all is good --> sets the text views to the age
             tvAgeYearOut.setText(String.valueOf(years));
             tvAgeMonthOut.setText(String.valueOf(months));
             tvAgeDayOut.setText(String.valueOf(days));
@@ -219,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (remMonthToBd<0) {remMonthToBd+=12;}
 
-        if (rdCheck.getCheckedRadioButtonId() == R.id.rd1) {
+        if (rgCheck.getCheckedRadioButtonId() == R.id.rd1) {
             if (calculateAgeCheck()) {
                 if (remDaysToBD == 0 && remMonthToBd == 0) {
                     tvErrorOut.setText("Happy Birthday");
@@ -232,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
                     tvNextDays.setText(String.valueOf(remDaysToBD));
                 }
             }
-        } else if (rdCheck.getCheckedRadioButtonId() == R.id.rd2) {
+        } else if (rgCheck.getCheckedRadioButtonId() == R.id.rd2) {
             if (remDaysToBD == 0 && remMonthToBd == 0) {
                 tvErrorOut.setText("Happy Anniversary");
                 tvErrorOut.setTextSize(18);
@@ -341,98 +382,95 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setPopUps() {
-        //Array and adapter for days
-        final String[] DAYS = new String[31];
-        for (int i = 0; i< DAYS.length; i++){
-            DAYS[i] = String.valueOf(i+1);
-        }
-        final ArrayAdapter<String> adapterDays = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,DAYS);
-
-        //Array and adapter for Months
-        final String[] MONTHS = new String[12];
-        for (int i = 0; i< MONTHS.length; i++){
-            MONTHS[i] = String.valueOf(i+1);
-        }
-        final ArrayAdapter<String> adapterMonths = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,MONTHS);
-
-        //Array and adapter for Years
-        final String[] YEARS = new String[120];
-        for (int i = 0; i< YEARS.length; i++){
-            YEARS[i] = String.valueOf(i+1900);
-        }
-        final ArrayAdapter<String> adapterYears = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,YEARS);
-
-
-
-        etDayIn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (etDayIn.hasFocus()) {
-                    final ListPopupWindow lpw = new ListPopupWindow(MainActivity.this);
-
-                    lpw.setAdapter(adapterDays);
-                    lpw.setAnchorView(etDayIn);
-                    lpw.setHeight(700);
-                    if (lpw.isShowing()){
-                        lpw.setSelection(Integer.parseInt(etDayIn.getText().toString()));
-                    }
-
-                    lpw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            etDayIn.setText(String.valueOf(DAYS[position]));
-                            lpw.dismiss();
-                        }
-                    });
-                    lpw.show();
-                }
-            }
-        });
-
-
-        etMonthIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final ListPopupWindow lpw = new ListPopupWindow(MainActivity.this);
-                lpw.setAdapter(adapterMonths);
-                lpw.setAnchorView(etMonthIn);
-                lpw.setHeight(700);
-
-                lpw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        etMonthIn.setText(String.valueOf(MONTHS[position]));
-                        lpw.dismiss();
-                    }
-                });
-                lpw.show();
-            }
-        });
-
-        etYearIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final ListPopupWindow lpw = new ListPopupWindow(MainActivity.this);
-                lpw.setAdapter(adapterYears);
-                lpw.setAnchorView(etYearIn);
-                lpw.setHeight(700);
-
-                lpw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        etYearIn.setText(String.valueOf(YEARS[position]));
-                        lpw.dismiss();
-                    }
-                });
-                lpw.show();
-            }
-        });
-    }
-
     private void setToday(){
         tvDay.setText(now.get(Calendar.DAY_OF_MONTH)+"");
         tvMonth.setText((now.get(Calendar.MONTH)+1)+"");
         tvYear.setText(now.get(Calendar.YEAR)+"");
     }
+
+    private void textHandlers(){
+
+        //auto next for day field
+        etDayIn.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if ( (etDayIn.getText().toString().length()==2) || (etDayIn.getText().toString().length()==1 && Integer.parseInt(etDayIn.getText().toString())>3) ) {
+                    etMonthIn.requestFocus();
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        //auto next for month field
+        etMonthIn.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if ( (etMonthIn.getText().toString().length()==2) || (etMonthIn.getText().toString().length()==1 && Integer.parseInt(etMonthIn.getText().toString())>1) ) {
+                    etYearIn.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        //hides keyboard if 4 digits exit in year field
+        etYearIn.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if ( (etYearIn.getText().toString().length()==4) ) {
+                    etYearIn.clearFocus();
+                    InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        //hides keyboard and resets focus on touching outside edittexts
+        findViewById(R.id.activity_main).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                (findViewById(R.id.dummy_id)).requestFocus();
+                InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                return false;
+            }
+        });
+
+    }
+
+
+
 }

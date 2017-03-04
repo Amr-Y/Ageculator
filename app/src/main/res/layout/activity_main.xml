@@ -7,6 +7,13 @@
     android:layout_height="match_parent"
     android:background="#FFF1F1F1">
 
+    <LinearLayout
+        android:id="@+id/dummy_id"
+        android:orientation="vertical"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -34,28 +41,28 @@
                 android:layout_width="90dp" />
 
             <TextView
-                android:text="Day"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/textViewD"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"/>
-
-            <TextView
-                android:text="Month"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1.05"
+                android:gravity="center_horizontal"
+                android:text="Day" />
+
+            <TextView
                 android:id="@+id/textViewM"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"/>
-
-            <TextView
-                android:text="Year"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1.1"
+                android:gravity="center_horizontal"
+                android:text="Month" />
+
+            <TextView
                 android:id="@+id/textViewY"
-                android:layout_weight="2"
-                android:gravity="center_horizontal" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.85"
+                android:gravity="center_horizontal"
+                android:text="Year" />
 
             <Space
                 android:layout_width="0dp"
@@ -89,6 +96,12 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="-"
+                android:layout_weight="0.1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/tvMonth"
                 android:text="MM"
                 android:textSize="24sp"
@@ -96,12 +109,19 @@
                 android:gravity="center_vertical|center_horizontal" />
 
             <TextView
+                android:id="@+id/textView6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:text="-" />
+
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvYear"
                 android:text="YYYY"
                 android:textSize="24sp"
-                android:layout_weight="2"
+                android:layout_weight="1.8"
                 android:gravity="center_vertical|center_horizontal" />
 
             <Space
@@ -126,39 +146,53 @@
                 android:gravity="center_vertical|start" />
 
             <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/etDay"
-                android:hint="DD"
-                android:textSize="24sp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="number"
-                android:maxLength="2"
                 android:gravity="center_vertical|center_horizontal"
-
-                />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:hint="DD"
                 android:inputType="number"
-                android:id="@+id/etMonth"
-                android:hint="MM"
-                android:textSize="24sp"
-                android:layout_weight="1"
                 android:maxLength="2"
-                android:gravity="center_vertical|center_horizontal" />
 
-            <EditText
+                android:selectAllOnFocus="true"
+                android:textSize="24sp" />
+
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="-"
+                android:layout_weight="0.1"/>
+
+            <EditText
+                android:id="@+id/etMonth"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:hint="MM"
+                android:inputType="number"
+                android:maxLength="2"
+                android:selectAllOnFocus="true"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:layout_weight="0.1"/>
+
+            <EditText
                 android:id="@+id/etYear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.8"
+                android:gravity="center_vertical|center_horizontal"
                 android:hint="YYYY"
-                android:textSize="24sp"
-                android:layout_weight="2"
                 android:inputType="number"
                 android:maxLength="4"
-                android:gravity="center_vertical|center_horizontal" />
+                android:selectAllOnFocus="true"
+                android:textSize="24sp" />
 
             <ImageButton
                 android:layout_width="0dp"
@@ -329,12 +363,24 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="-"
+                android:layout_weight="0.1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/tvAgeMonth"
                 android:textSize="18sp"
                 android:textColor="@android:color/background_dark"
-                android:layout_weight="1"
+                android:layout_weight=".8"
                 android:text="MM"
                 android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:layout_weight="0.1"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -364,7 +410,7 @@
                 android:paddingEnd="4dp"
                 android:textColor="@android:color/background_dark"
                 android:text="Next birthday"
-                android:layout_weight="2" />
+                android:layout_weight="2.1" />
 
             <TextView
                 android:text="MM"
@@ -373,8 +419,14 @@
                 android:id="@+id/tvNextMonths"
                 android:textSize="18sp"
                 android:textColor="@android:color/background_dark"
-                android:layout_weight="1"
+                android:layout_weight=".8"
                 android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:layout_weight="0.1"/>
 
             <TextView
                 android:text="DD"
