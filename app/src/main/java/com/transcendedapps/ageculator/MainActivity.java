@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 return (false);
             //must be less than 150 year
             } else if ((radioCheck==1 && years>150)) {
-                tvErrorOut.setText("Vampire detected");
+                tvErrorOut.setText("Too old");
                 return (false);
             //if month entered < 0 (or) > 12 (or) bd time > now time and month > now.month
             } else if ((Integer.parseInt(etMonthIn.getText().toString()) - 1 < 0 || Integer.parseInt(etMonthIn.getText().toString()) - 1 > 11)|| (bDay.getTimeInMillis()>now.getTimeInMillis() && Integer.parseInt(etMonthIn.getText().toString())-1> now.get(Calendar.MONTH))) {
